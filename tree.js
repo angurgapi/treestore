@@ -25,6 +25,31 @@ class TreeStore {
     });  
     return allChildrenArray
   }
+
+  getDirectParent(id) {
+    let parentId = this.array.find((child) => child.id === id)?.parent || null;
+    switch (typeof parentId) {
+      case 'string':
+        return parentId      
+
+      case 'number':
+        return this.array.find(({id}) => id === parentId)      
+
+      default:
+        return 'element not found'
+      
+    }
+  }
+
+  getAllParents(id) {    
+    let allParentsArray = []
+    allParentsArray.push(this.getDirectParent(id))
+    
+    if(typeof (allParentsArray[allParentsArray.length - 1].parent) === 'number') {      
+      allParentsArray.push(...this.getAllParents(allParentsArray[allParentsArray.length - 1].id))
+    }
+    return allParentsArray
+  }
 }
 
 
@@ -44,6 +69,9 @@ const items = [
 ];
 
 let testTree = new TreeStore(items);
-// console.log(2, testTree.getChildren(2));
-// console.log(7, testTree.getChildren(7));
-console.log('all', testTree.getAllChildren(2))
+console.log('all children of 2', testTree.getAllChildren(2))
+console.log('all children of 9', testTree.getAllChildren(9))
+console.log('parent of 1', testTree.getDirectParent(1))
+console.log('parent of 7', testTree.getDirectParent(7))
+console.log('parent of 100', testTree.getDirectParent(100))
+console.log('all parents of 10', testTree.getAllParents(10))
