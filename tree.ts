@@ -1,24 +1,24 @@
-"use strict";
-
 class TreeStore {
-  constructor(array) {
+  
+  array: Array<any>;
+
+  constructor(array: Array<any>) {
     this.array = array;
   }
 
   getAll() {
     return this.array;
-    // console.log(this.array.find(({id}) => id == objId));
   }
 
-  getItem(id) {
+  getItem(id: number) {
     return this.array.find((obj) => obj.id === id);
   }
 
-  getChildren(id) {
+  getChildren(id: number) {
     return this.array.filter((obj) => obj.parent === id);
   }
 
-  getAllChildren(id) {
+  getAllChildren(id: number) {
     let allChildrenArray = this.getChildren(id)   
     allChildrenArray.forEach(child => {        
         allChildrenArray.push(...this.getAllChildren(child.id))
@@ -26,8 +26,8 @@ class TreeStore {
     return allChildrenArray
   }
 
-  getDirectParent(id) {
-    let parentId = this.array.find((child) => child.id === id)?.parent || null;
+  getDirectParent(id: number) {
+    let parentId: any = this.array.find((child) => child.id === id)?.parent || null;
     switch (typeof parentId) {
       case 'string':
         return parentId      
@@ -41,8 +41,8 @@ class TreeStore {
     }
   }
 
-  getAllParents(id) {    
-    let allParentsArray = []
+  getAllParents(id: number) {    
+    let allParentsArray:Array<any> = []
     allParentsArray.push(this.getDirectParent(id))    
     if(typeof (allParentsArray[allParentsArray.length - 1].parent) === 'number') {      
       allParentsArray.push(...this.getAllParents(allParentsArray[allParentsArray.length - 1].id))
